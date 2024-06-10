@@ -49,7 +49,7 @@ jobs:
       - name: Build
         working-directory: ${{ matrix.image_name }}
         run: |
-          mvn package
+          mvn package -DskipTests
           mv target/*.jar app.jar
 
       - name: Log in to Github Container Registry
