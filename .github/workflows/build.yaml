@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build
 on:
   push:
     branches:
@@ -22,7 +22,6 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
       kafka:
         image: wurstmeister/kafka:latest
         ports:
@@ -69,7 +68,6 @@ jobs:
       - name: Build and push ${{ matrix.image_name }}
         uses: docker/build-push-action@v4
         with:
-        with:
           context: ${{ matrix.image_name }}
           file: ${{ matrix.image_name }}/Dockerfile
           push: true
@@ -77,3 +75,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           secrets: |
             GITHUB_TOKEN=${{ secrets.GH_TOKEN }}
+        env:
+          SPRING_KAFKA_BOOTSTRAP_SERVERS: broker:29092
+
